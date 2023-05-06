@@ -14,6 +14,7 @@ This repository contains the programs developed as part of our [MicroProfiler](h
 ```
 
 All tools and experiments are bundled into a Docker container for convenience, but can of course also be run separately.
+As such, the only prerequisite is to have [Docker](https://docs.docker.com/engine/install/) installed on your system.
 The container can be built with `make docker-build` and run with `make docker-run`.
 
 The rest of this document describes the components of the Docker container, with references to the build steps outlined in the [Dockerfile](./Dockerfile).
