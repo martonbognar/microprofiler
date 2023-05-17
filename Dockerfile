@@ -56,9 +56,6 @@ RUN make install && \
     cp -r test/sancus/results /benchmarks-dma/ && \
     make -C test/sancus nemdef-clean
 
-WORKDIR /benchmarks-dma
-RUN cp -r /sllvm/test/sancus/* /benchmarks-dma
-
 ########################################
 ## 1.2. VCDVCD
 ########################################
