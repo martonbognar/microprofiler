@@ -16,6 +16,7 @@ This repository contains the programs developed as part of our [MicroProfiler](h
 All tools and experiments are bundled into a Docker container for convenience, but can of course also be run separately.
 As such, the only prerequisite is to have [Docker](https://docs.docker.com/engine/install/) installed on your system.
 The container can be built with `make docker-build` and run with `make docker-run`.
+Building the container takes about 6 hours and requires 10 GB of disk space.
 
 The rest of this document describes the components of the Docker container, with references to the build steps outlined in the [Dockerfile](./Dockerfile).
 
@@ -64,14 +65,14 @@ ifthenloop         282    143,   96                1.28x   1.19x, 1.77x         
 The script `scripts/attacker.py` can analyze the memory activity of the simulations and reconstruct the secret leakage based on it (step 2).
 
 ```shell
-/profiling/attacker.py bsl /benchmarks-nemesis/bsl/bsl.nemdef.vcd
-/profiling/attacker.py mul /benchmarks-nemesis/mulhi3/mulhi3.nemdef.vcd
+RUN ./attacker.py bsl /attacks/bsl.nemdef.vcd
+RUN ./attacker.py mul /attacks/mulhi3.nemdef.vcd
 ```
 
 Expected output:
 
 ```
-./attacker.py bsl /benchmarks-nemesis/bsl/bsl.nemdef.vcd
+./attacker.py bsl /attacks/bsl.nemdef.vcd
 Starting attack...
 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓
 Starting attack...
@@ -98,6 +99,9 @@ cd /sllvm/test/sancus/mulhi3
 make -f Makefile.attacker
 make -f Makefile.attacker sim
 ```
+
+Important to note, these attack demonstrations require the Nemesis-only mitigation to be compiled on the system, which is overwritten by the DMA+Nemesis mitigation during later stages of the Docker build process.
+To recompile the Nemesis mitigation, run `cd /sllvm && make checkout-master && make install`.
 
 ## Static analysis
 

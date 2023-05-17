@@ -26,37 +26,35 @@ WORKDIR /sllvm/sancus-main/sancus-core
 RUN git checkout dma-attack
 
 WORKDIR /sllvm
-RUN make install && rm -rf build
-
+RUN make install && \
 ################################################################################
 ## 1.1.1. Run case study attacks with the peripheral and untrusted C code
 ################################################################################
-
-WORKDIR /sllvm/test/sancus/bsl
-RUN make -f Makefile.attacker && make -f Makefile.attacker sim
-
-WORKDIR /sllvm/test/sancus/mulhi3
-RUN make -f Makefile.attacker && make -f Makefile.attacker sim
-
+    cd /sllvm/test/sancus/bsl && \
+    make -f Makefile.attacker && make -f Makefile.attacker sim && \
+    cd /sllvm/test/sancus/mulhi3 && \
+    make -f Makefile.attacker && make -f Makefile.attacker sim && \
 ################################################################################
 ## 1.1.2. Run mitigation evaluation for Nemesis
 ################################################################################
-
-WORKDIR /sllvm
-RUN make checkout-master && make -C test/sancus nemdef-pp
-
-WORKDIR /benchmarks-nemesis
-RUN cp -r /sllvm/test/sancus/* /benchmarks-nemesis
-
-# Get TableGen description used for profiling
-RUN /sllvm/install/bin/llvm-tblgen -I /sllvm/sllvm/llvm/lib/Target/MSP430/ -I /sllvm/sllvm/llvm/include/ -gen-msp430-latency-info /sllvm/sllvm/llvm/lib/Target/MSP430/MSP430.td >tablegen_raw.txt
-
-################################################################################
-## 1.1.3. Run mitigation evaluation for DMA
-################################################################################
-
-WORKDIR /sllvm
-RUN make -C test/sancus nemdef-clean && make checkout-dma-attack && make configure && make install && make -C test/sancus nemdef-pp && rm -rf build
+    cd /sllvm && \
+    make checkout-master && \
+    make -C test/sancus nemdef-pp && \
+    mkdir /attacks && cp test/sancus/bsl/bsl.nemdef.vcd /attacks/ && cp test/sancus/mulhi3/mulhi3.nemdef.vcd /attacks/ && \
+    mkdir /benchmarks-nemesis && cp test/sancus/*/[a-z]*.nemdef /benchmarks-nemesis/ && \
+    cp -r test/sancus/results /benchmarks-nemesis/ && \
+    make -C test/sancus nemdef-clean && \
+    # Get TableGen description used for profiling
+    /sllvm/install/bin/llvm-tblgen -I /sllvm/sllvm/llvm/lib/Target/MSP430/ -I /sllvm/sllvm/llvm/include/ -gen-msp430-latency-info /sllvm/sllvm/llvm/lib/Target/MSP430/MSP430.td >/benchmarks-nemesis/tablegen_raw.txt && \
+    ################################################################################
+    ## 1.1.3. Run mitigation evaluation for DMA
+    ################################################################################
+    make checkout-dma-attack && \
+    make configure && make install && rm -rf build && \
+    make -C test/sancus nemdef-pp && \
+    mkdir /benchmarks-dma && cp test/sancus/*/[a-z]*.nemdef /benchmarks-dma/ && \
+    cp -r test/sancus/results /benchmarks-dma/ && \
+    make -C test/sancus nemdef-clean
 
 WORKDIR /benchmarks-dma
 RUN cp -r /sllvm/test/sancus/* /benchmarks-dma
@@ -91,8 +89,8 @@ WORKDIR /sllvm/sancus-main/sancus-core/core/sim/rtl_sim/run
 RUN __SANCUS_SIM=1 ./run sancus/dma_covert
 
 WORKDIR /profiling
-RUN ./attacker.py bsl /benchmarks-nemesis/bsl/bsl.nemdef.vcd
-RUN ./attacker.py mul /benchmarks-nemesis/mulhi3/mulhi3.nemdef.vcd
+RUN ./attacker.py bsl /attacks/bsl.nemdef.vcd
+RUN ./attacker.py mul /attacks/mulhi3.nemdef.vcd
 RUN ./attacker.py covert /sllvm/sancus-main/sancus-core/core/sim/rtl_sim/run/tb_openMSP430.vcd
 
 ################################################################################
@@ -110,13 +108,11 @@ WORKDIR /scf-msp430-dma
 # clean up built-in benchmarks
 RUN rm testcase/*.nemdef testcase/*.vulnerable
 
-RUN cp /benchmarks-nemesis/*/[a-z]*.vulnerable testcase/
-RUN cp /benchmarks-nemesis/*/[a-z]*.nemdef testcase/
+RUN cp /benchmarks-nemesis/[a-z]*.nemdef testcase/
 
 RUN ./run_all_nemdef.sh --minimal
 
-RUN cp /benchmarks-dma/*/[a-z]*.vulnerable testcase/
-RUN cp /benchmarks-dma/*/[a-z]*.nemdef testcase/
+RUN cp /benchmarks-dma/[a-z]*.nemdef testcase/
 
 RUN ./run_all_nemdef.sh --minimal
 
