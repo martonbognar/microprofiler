@@ -103,7 +103,13 @@ make -f Makefile.attacker sim
 ```
 
 Important to note, these attack demonstrations require the Nemesis-only mitigation to be compiled on the system, which is overwritten by the DMA+Nemesis mitigation during later stages of the Docker build process.
-To recompile the Nemesis mitigation, run `cd /sllvm && make checkout-master && make install`.
+To recompile the Nemesis mitigation, run:
+
+```shell
+cd /sllvm
+make checkout-master
+make install
+```
 
 ## Static analysis
 
