@@ -63,11 +63,12 @@ ifthenloop         282    143,   96                1.28x   1.19x, 1.77x         
 
 ## Attacks
 
-The script `scripts/attacker.py` can analyze the memory activity of the simulations and reconstruct the secret leakage based on it (step 2).
+The script `/profiling/attacker.py` can analyze the memory activity of the simulations and reconstruct the secret leakage based on it (step 2).
 
 ```shell
-RUN ./attacker.py bsl /attacks/bsl.nemdef.vcd
-RUN ./attacker.py mul /attacks/mulhi3.nemdef.vcd
+cd /profiling
+./attacker.py bsl /attacks/bsl.nemdef.vcd
+./attacker.py mul /attacks/mulhi3.nemdef.vcd
 ```
 
 Expected output:
