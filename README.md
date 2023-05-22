@@ -24,7 +24,7 @@ The rest of this document describes the components of the Docker container, with
 
 The main script to perform the microarchitectural profiling is `scripts/profiling.py`.
 Inside the container, this is copied to `/profiling/profiling.py` and ran in step 3, with as input the raw TableGen generated list of instructions (and some paths for running the simulations and the vcdvcd extraction tool):
-```
+```shell
 cd /profiling
 ./profiling.py /sllvm/sancus-main/sancus-core /vcdvcd /benchmarks-nemesis/tablegen_raw.txt
 ```
