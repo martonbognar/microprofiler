@@ -113,8 +113,7 @@ The example of running the analysis for the binaries compiled by the combined mi
 
 ```shell
 cd /scf-msp430-dma
-cp /benchmarks-dma/*/[a-z]*.vulnerable testcase/
-cp /benchmarks-dma/*/[a-z]*.nemdef testcase/
+cp /benchmarks-dma/[a-z]*.nemdef testcase/
 
 ./run_all_nemdef.sh
 ```
