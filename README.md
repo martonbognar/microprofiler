@@ -123,7 +123,7 @@ The example of running the analysis for the binaries compiled by the combined mi
 cd /scf-msp430-dma
 cp /benchmarks-dma/[a-z]*.nemdef testcase/
 
-./run_all_nemdef.sh
+./run_all_nemdef.sh --minimal
 ```
 
 Expected output (running for the only-Nemesis-hardened benchmarks):
