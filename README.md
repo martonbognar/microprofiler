@@ -108,6 +108,8 @@ To recompile the Nemesis mitigation, run:
 ```shell
 cd /sllvm
 make checkout-master
+make fetch
+make configure
 make install
 ```
 
