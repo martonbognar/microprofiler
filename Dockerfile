@@ -50,10 +50,11 @@ RUN make install && \
     ## 1.1.3. Run mitigation evaluation for DMA
     ################################################################################
     make checkout-dma-attack && \
-    make configure && make install && make clean-fetch && \
+    make configure && make install && \
     make -C test/sancus nemdef-pp && \
     mkdir /benchmarks-dma && cp test/sancus/*/[a-z]*.nemdef /benchmarks-dma/ && \
     cp -r test/sancus/results /benchmarks-dma/ && \
+    make clean-fetch && \
     make -C test/sancus nemdef-clean
 
 ########################################
