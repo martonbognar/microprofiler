@@ -18,6 +18,12 @@ As such, the only prerequisite is to have [Docker](https://docs.docker.com/engin
 The container can be built with `make docker-build` and run with `make docker-run`.
 Building the container takes about 6 hours and requires 10 GB of disk space.
 
+Alternatively, you can pull a prebuilt container from [Docker Hub](https://hub.docker.com/r/martonbognar/microprofiler):
+
+```shell
+docker pull martonbognar/microprofiler
+```
+
 The rest of this document describes the components of the Docker container, with references to the build steps outlined in the [Dockerfile](./Dockerfile).
 
 ## Profiling step
